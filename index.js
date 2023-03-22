@@ -33,7 +33,7 @@ var listener = app.listen(process.env.PORT, function () {
 app.get("/api/:date?", (req, res) => {
   let date = req.params.date;
   //If it's empty
-  if (date == "") {
+  if (date === undefined) {
     let dateObject = new Date();
     res.json({"unix": Date.parse(dateObject), "utc": dateObject.toUTCString()});
   }
