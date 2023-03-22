@@ -32,15 +32,24 @@ var listener = app.listen(process.env.PORT, function () {
 
 app.get("/api/:date?", (req, res) => {
   let date = req.params.date;
+  //If it's empty
+  if (date == "") {
+    let dateObject = new Date();
+    res.json({"unix": Date.parse(dateObject), "utc": dateObject.toUTCString()});
+  }
   //if it's not Unix timestamp
-  if(Date.parse(date)) {
+  else if(Date.parse(date)) {
     let dateObject = new Date(date);
     res.json({"unix": Date.parse(date), "utc": dateObject.toUTCString()});
   }
-  else {
-    //It's Unix timestamp
+  //It's Unix timestamp
+  else if (!isNaN(date)) {
     let numberDate = parseInt(date);
     let dateObject = new Date(numberDate);
     res.json({"unix": numberDate, "utc": dateObject.toUTCString()});
+  }
+  //If it's invalid
+  else {
+    res.json({ error : "Invalid Date" });
   }
 });
