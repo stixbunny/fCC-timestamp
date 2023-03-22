@@ -25,8 +25,22 @@ app.get("/api/hello", function (req, res) {
 });
 
 
-
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
+});
+
+app.get("/api/:date?", (req, res) => {
+  let date = req.params.date;
+  //if it's not Unix timestamp
+  if(Date.parse(date)) {
+    let dateObject = new Date(date);
+    res.json({"unix": Date.parse(date), "utc": dateObject.toUTCString()});
+  }
+  else {
+    //It's Unix timestamp
+    let numberDate = parseInt(date);
+    let dateObject = new Date(numberDate);
+    res.json({"unix": numberDate, "utc": dateObject.toUTCString()});
+  }
 });
